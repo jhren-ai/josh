@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Josh Hren — Websites for grassroots organizations</title>
+<meta name="description" content="Josh Hren builds websites for grassroots organizations, campaigns, and nonprofits. Strategy, design, and a clean handoff.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Overpass:wght@400;600;700;800;900&family=Overpass+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    /* Palette borrowed from a USGS topographic quadrangle:
+       brown contours, blue hydrography, green vegetation tint, on map stock. */
+    --paper:      #E9E6DA;
+    --paper-lit:  #F2F0E7;
+    --ink:        #1E231F;
+    --ink-soft:   #4A5148;
+    --brown:      #8A5A34;
+    --brown-deep: #5B3A1F;
+    --blue:       #2A6B8F;
+    --blue-pale:  #A9C9D6;
+    --green:      #3D6B47;
+    --green-pale: #B4C9A2;
+
+    --collar: 1px solid rgba(91,58,31,.32);
+    --measure: 1140px;
+  }
+
+  *,*::before,*::after{ box-sizing:border-box; }
+
+  html{ -webkit-text-size-adjust:100%; }
+
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:"Newsreader",Georgia,serif;
+    font-size:clamp(1.05rem,.55vw + .95rem,1.2rem);
+    line-height:1.6;
+    font-optical-sizing:auto;
+  }
+
+  a{ color:inherit; }
+
+  ::selection{ background:var(--blue-pale); }
+
+  :focus-visible{
+    outline:2px solid var(--blue);
+    outline-offset:4px;
+    border-radius:1px;
+  }
+
+  /* ---- map sheet ---- */
+
+  .sheet{
+    max-width:var(--measure);
+    margin:0 auto;
+    border-left:var(--collar);
+    border-right:var(--collar);
+  }
+
+  .band{
+    padding:clamp(3.5rem,8vw,7rem) clamp(1.25rem,4vw,3.5rem);
+    border-top:var(--collar);
+  }
+
+  /* ---- collar bars ---- */
+
+  .collar{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    gap:1rem;
+    flex-wrap:wrap;
+    padding:.7rem clamp(1.25rem,4vw,3.5rem);
+    font-family:"Overpass Mono",ui-monospace,monospace;
+    font-size:.7rem;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--brown-deep);
+  }
+  .collar--top{ border-bottom:var(--collar); }
+  .collar--bottom{ border-top:var(--collar); }
+  .collar a{ text-decoration:none; border-bottom:1px solid rgba(91,58,31,.4); padding-bottom:2px; }
+  .collar a:hover{ color:var(--blue); border-bottom-color:var(--blue); }
+
+  /* ---- hero ---- */
+
+  .hero{
+    position:relative;
+    isolation:isolate;
+    overflow:hidden;
+    padding:clamp(4rem,11vw,9rem) clamp(1.25rem,4vw,3.5rem) clamp(3.5rem,8vw,7rem);
+  }
+
+  .terrain{
+    position:absolute;
+    inset:-5% -2%;
+    width:104%;
+    height:110%;
+    z-index:-1;
+    mix-blend-mode:multiply;
+    pointer-events:none;
+  }
+
+  .hero::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    z-index:-1;
+    background:radial-gradient(120% 75% at 8% 42%, rgba(233,230,218,.94) 0%, rgba(233,230,218,.72) 42%, rgba(233,230,218,0) 78%);
+    pointer-events:none;
+  }
+
+  h1{
+    font-family:"Overpass",system-ui,sans-serif;
+    font-weight:900;
+    font-size:clamp(2.5rem,8.2vw,5.6rem);
+    line-height:.94;
+    letter-spacing:-.035em;
+    margin:0;
+    max-width:16ch;
+    text-wrap:balance;
+  }
+  h1 .wet{
+    font-family:"Newsreader",Georgia,serif;
+    font-style:italic;
+    font-weight:400;
+    letter-spacing:-.01em;
+    color:var(--blue);
+  }
+
+  .hero p{
+    max-width:34ch;
+    margin:clamp(1.6rem,3.5vw,2.2rem) 0 0;
+    font-size:clamp(1.15rem,.7vw + 1rem,1.4rem);
+    color:var(--ink-soft);
+  }
+
+  .hero .chat{ color:var(--ink); }
+
+  /* ---- legend ---- */
+
+  .legend{
+    display:grid;
+    gap:clamp(2.2rem,4vw,3rem);
+    grid-template-columns:1fr;
+  }
+  @media (min-width:800px){
+    .legend{ grid-template-columns:repeat(3,1fr); gap:clamp(2rem,3.5vw,3.25rem); }
+  }
+
+  .key svg{ display:block; margin-bottom:1.1rem; }
+
+  .key h2{
+    font-family:"Overpass",system-ui,sans-serif;
+    font-weight:800;
+    font-size:1.3rem;
+    letter-spacing:-.015em;
+    margin:0 0 .6rem;
+  }
+  .key p{ margin:0; color:var(--ink-soft); font-size:1.02rem; line-height:1.55; }
+
+  .hero-mail{
+    margin:clamp(2rem,4.5vw,2.75rem) 0 0;
+    font-family:"Overpass",system-ui,sans-serif;
+    font-weight:700;
+    font-size:clamp(1.05rem,.6vw + .95rem,1.25rem);
+    letter-spacing:-.01em;
+    color:var(--ink-soft);
+  }
+  .hero-mail a{
+    color:var(--ink);
+    text-decoration:none;
+    box-shadow:inset 0 -2px 0 var(--blue);
+    padding-bottom:1px;
+    word-break:break-word;
+    transition:color .18s ease, box-shadow .18s ease;
+  }
+  .hero-mail a:hover{ color:var(--blue); box-shadow:inset 0 -4px 0 var(--blue); }
+
+  /* ---- contact ---- */
+
+  .contact p{
+    max-width:38ch;
+    margin:0 0 clamp(1.8rem,3.5vw,2.5rem);
+    color:var(--ink-soft);
+  }
+
+  .mail{
+    display:inline-block;
+    font-family:"Overpass",system-ui,sans-serif;
+    font-weight:800;
+    font-size:clamp(1.5rem,5.2vw,3.4rem);
+    letter-spacing:-.035em;
+    line-height:1.05;
+    color:var(--ink);
+    text-decoration:none;
+    background-image:linear-gradient(var(--blue),var(--blue));
+    background-repeat:no-repeat;
+    background-position:0 100%;
+    background-size:100% 3px;
+    padding-bottom:.12em;
+    word-break:break-word;
+    transition:color .18s ease, background-size .18s ease;
+  }
+  .mail:hover{ color:var(--blue); background-size:100% 6px; }
+
+  /* ---- scale bar in footer ---- */
+
+  .scalebar{ display:flex; align-items:center; gap:.55rem; }
+  .scalebar svg{ display:block; }
+
+  /* ---- plotting animation ---- */
+
+  @media (prefers-reduced-motion: no-preference){
+    .plot{
+      stroke-dasharray:100;
+      stroke-dashoffset:100;
+      animation:plot 2.4s cubic-bezier(.4,0,.2,1) forwards;
+    }
+    .tint{ opacity:0; animation:fade 1.6s ease .9s forwards; }
+    .lift{ opacity:0; transform:translateY(12px); animation:lift .9s cubic-bezier(.2,.7,.2,1) forwards; }
+    .lift-1{ animation-delay:.1s; }
+    .lift-2{ animation-delay:.24s; }
+    .lift-3{ animation-delay:.38s; }
+    .lift-4{ animation-delay:.52s; }
+  }
+  @keyframes plot{ to{ stroke-dashoffset:0; } }
+  @keyframes fade{ to{ opacity:1; } }
+  @keyframes lift{ to{ opacity:1; transform:none; } }
+</style>
+</head>
+<body>
+
+<div class="sheet">
+
+  <div class="collar collar--top">
+    <span>Josh Hren · Web design &amp; strategy</span>
+    <span><a href="mailto:joshuafhren@gmail.com">joshuafhren@gmail.com</a></span>
+  </div>
+
+  <header class="hero">
+    <svg class="terrain" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
+      <defs>
+        <path id="ring" pathLength="100"
+          d="M 0 -60 C 42 -72 92 -42 96 2 C 100 48 58 78 8 74 C -42 70 -88 46 -94 2 C -100 -46 -50 -54 0 -60 Z"/>
+        <path id="ring2" pathLength="100"
+          d="M 0 -52 C 46 -60 78 -30 82 6 C 86 44 44 66 2 62 C -40 58 -78 34 -80 -2 C -82 -40 -44 -46 0 -52 Z"/>
+      </defs>
+
+      <!-- vegetation tint -->
+      <g class="tint" fill="#B4C9A2" opacity=".55">
+        <path d="M -40 470 C 120 430 210 500 330 500 C 460 500 520 570 500 660 C 480 750 300 830 120 820 C -20 812 -60 700 -40 470 Z"/>
+        <path d="M 1240 30 C 1120 40 1040 110 1050 190 C 1060 275 1180 300 1250 280 Z"/>
+      </g>
+
+      <!-- brown contours: ridge A -->
+      <g fill="none" stroke="#8A5A34" stroke-width="1.5" opacity=".8">
+        <use class="plot" href="#ring" transform="translate(255,300) scale(.3)"   style="animation-delay:0s"/>
+        <use class="plot" href="#ring" transform="translate(250,296) scale(.62)"  style="animation-delay:.08s"/>
+        <use class="plot" href="#ring" transform="translate(244,292) scale(.95) rotate(-3)" style="animation-delay:.16s"/>
+        <use class="plot" href="#ring" transform="translate(238,288) scale(1.3) rotate(-5)" style="animation-delay:.24s"/>
+        <use class="plot" href="#ring" transform="translate(230,282) scale(1.68) rotate(-7)" style="animation-delay:.32s"/>
+        <use class="plot" href="#ring" transform="translate(220,276) scale(2.1) rotate(-9)"  style="animation-delay:.4s"/>
+        <use class="plot" href="#ring" transform="translate(208,268) scale(2.58) rotate(-11)" style="animation-delay:.48s"/>
+        <use class="plot" href="#ring" transform="translate(194,258) scale(3.1) rotate(-13)"  style="animation-delay:.56s"/>
+      </g>
+
+      <!-- brown contours: ridge B -->
+      <g fill="none" stroke="#8A5A34" stroke-width="1.5" opacity=".65">
+        <use class="plot" href="#ring2" transform="translate(1000,585) scale(.34) rotate(20)" style="animation-delay:.3s"/>
+        <use class="plot" href="#ring2" transform="translate(1004,592) scale(.72) rotate(18)" style="animation-delay:.38s"/>
+        <use class="plot" href="#ring2" transform="translate(1010,600) scale(1.14) rotate(16)" style="animation-delay:.46s"/>
+        <use class="plot" href="#ring2" transform="translate(1018,610) scale(1.6) rotate(14)"  style="animation-delay:.54s"/>
+        <use class="plot" href="#ring2" transform="translate(1028,622) scale(2.1) rotate(12)"  style="animation-delay:.62s"/>
+        <use class="plot" href="#ring2" transform="translate(1040,636) scale(2.64) rotate(10)" style="animation-delay:.7s"/>
+      </g>
+
+      <!-- hydrography -->
+      <g fill="none" stroke="#2A6B8F" stroke-linecap="round" opacity=".85">
+        <path class="plot" pathLength="100" stroke-width="2.6" style="animation-delay:.5s"
+          d="M 1215 105 C 1070 190 990 250 872 296 C 754 342 712 424 630 476 C 548 528 438 546 368 626 C 306 698 268 764 240 816"/>
+        <path class="plot" pathLength="100" stroke-width="1.6" style="animation-delay:.8s"
+          d="M 1220 512 C 1088 494 918 470 800 442 C 742 428 700 434 668 452"/>
+        <path class="plot" pathLength="100" stroke-width="1.4" style="animation-delay:.95s"
+          d="M 470 -20 C 500 90 560 180 610 250 C 646 300 660 360 646 452"/>
+      </g>
+    </svg>
+
+    <h1 class="lift lift-2">I build websites for people trying to do <span class="wet">some good.</span></h1>
+
+    <p class="lift lift-3">
+      Grassroots organizations, campaigns, and nonprofits.
+      <span class="chat">If that sounds like you, we should probably chat.</span>
+    </p>
+
+    <p class="hero-mail lift lift-4">Email me at <a href="mailto:joshuafhren@gmail.com">joshuafhren@gmail.com</a></p>
+  </header>
+
+  <section class="band">
+    <div class="legend">
+
+      <article class="key">
+        <svg width="56" height="34" viewBox="0 0 56 34" aria-hidden="true" focusable="false">
+          <g fill="none" stroke="#8A5A34" stroke-width="1.5">
+            <path d="M4 30 C 12 12 24 4 34 5 C 46 6 52 16 53 30"/>
+            <path d="M12 31 C 18 18 26 12 34 13 C 43 14 46 21 47 31"/>
+            <path d="M20 32 C 24 24 29 21 34 21.5 C 39 22 41 26 41 32"/>
+          </g>
+        </svg>
+        <h2>Figure out the terrain</h2>
+        <p>Before anything gets designed: who you're talking to, what they need to do, and what you're actually asking them for. Sitemaps, content, plain language, hard questions.</p>
+      </article>
+
+      <article class="key">
+        <svg width="56" height="34" viewBox="0 0 56 34" aria-hidden="true" focusable="false">
+          <g fill="none" stroke="#2A6B8F" stroke-linecap="round">
+            <path stroke-width="2.4" d="M2 6 C 14 12 16 20 26 22 C 36 24 42 28 54 30"/>
+            <path stroke-width="1.4" d="M22 2 C 24 10 22 16 26 22"/>
+          </g>
+        </svg>
+        <h2>Design and build it</h2>
+        <p>A site that loads fast, works on a five-year-old phone, and reads well to someone who's skeptical of you. Accessible by default, not as a retrofit.</p>
+      </article>
+
+      <article class="key">
+        <svg width="56" height="34" viewBox="0 0 56 34" aria-hidden="true" focusable="false">
+          <rect x="2" y="4" width="52" height="26" fill="#B4C9A2" opacity=".7"/>
+          <rect x="2" y="4" width="52" height="26" fill="none" stroke="#3D6B47" stroke-width="1.2"/>
+          <g fill="#3D6B47" opacity=".85">
+            <circle cx="12" cy="12" r="1.4"/><circle cx="26" cy="10" r="1.4"/><circle cx="40" cy="14" r="1.4"/>
+            <circle cx="18" cy="22" r="1.4"/><circle cx="33" cy="24" r="1.4"/><circle cx="46" cy="21" r="1.4"/>
+          </g>
+        </svg>
+        <h2>Hand you the keys</h2>
+        <p>You own the thing when we're done. Training, documentation, no proprietary lock-in, no retainer you can't get out of. Small budgets get told the truth about them.</p>
+      </article>
+
+    </div>
+  </section>
+
+  <section class="band contact">
+    <p>Tell me what you're working on and where it's stuck. I'll tell you honestly whether I'm the right person for it.</p>
+    <a class="mail" href="mailto:joshuafhren@gmail.com?subject=Let%27s%20chat">joshuafhren@gmail.com</a>
+  </section>
+
+  <div class="collar collar--bottom">
+    <span class="scalebar">
+      <svg width="90" height="10" viewBox="0 0 90 10" aria-hidden="true" focusable="false">
+        <rect x="0" y="2" width="22.5" height="6" fill="#5B3A1F"/>
+        <rect x="22.5" y="2" width="22.5" height="6" fill="none" stroke="#5B3A1F"/>
+        <rect x="45" y="2" width="22.5" height="6" fill="#5B3A1F"/>
+        <rect x="67.5" y="2" width="22.5" height="6" fill="none" stroke="#5B3A1F"/>
+      </svg>
+    </span>
+    <span>© 2026 Josh Hren</span>
+  </div>
+
+</div>
+
+</body>
+</html>
