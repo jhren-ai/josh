@@ -1,0 +1,148 @@
+<div id="scs-about-root"></div>
+<script>
+(function () {
+  /* ===== EDIT HERE ===================================================== */
+  var COLORS = {
+    accent:     "#1F4E79", /* stat numbers, rules, quote background */
+    accentSoft: "#E8EEF5", /* stat strip background */
+    quoteText:  "#FFFFFF"
+  };
+
+  /* Photos: upload to Media > Add New, click each, "Copy URL to clipboard",
+     and paste between the quotes. Photo 1 is the large one on the left.
+     Leave url "" to show a placeholder. */
+  var PHOTOS = [
+    { url: "", alt: "Sherwood Charter School students" },
+    { url: "", alt: "Students on a field trip" },
+    { url: "", alt: "Students performing on stage" }
+  ];
+
+  var HEADING = "About Sherwood Charter School";
+  var LEAD = "Sherwood Charter School is a tuition-free public elementary and middle school of choice that consistently earns an “Outstanding” rating from the Oregon Department of Education.";
+
+  var STATS = [
+    { big: "Outstanding", small: "Oregon Dept. of Education rating" },
+    { big: "25",          small: "Max students per elementary class" },
+    { big: "75",          small: "Students in our middle school" },
+    { big: "4-Day",       small: "School week" }
+  ];
+
+  var PARAGRAPHS = [
+    "Elementary classrooms are capped at 25 students, while middle school students become part of a close-knit community of just 75 students where they are truly known. At every grade level, we foster a lifelong love of learning, meaningful relationships, and a strong foundation for continued academic success.",
+    "Sherwood Charter School enrollment is open to families within and beyond Sherwood, and the school operates on a four-day school week, offering students extended weekends to engage with the world around them.",
+    "Students enjoy high enrichment with multiple field trips each year, opportunities for musical and theatrical performances, hands-on arts education, and immersive experiences in their classrooms that bring learning to life."
+  ];
+
+  var QUOTE_INTRO = "We hear it all the time from our students and their families:";
+  var QUOTE       = "This is a place where kids love coming to school!";
+  /* ===================================================================== */
+
+  var root = document.getElementById("scs-about-root");
+  if (!root) return;
+
+  var css = [
+    ".scs-about{--a:" + COLORS.accent + ";--as:" + COLORS.accentSoft + ";--qt:" + COLORS.quoteText + ";",
+    "font-family:inherit;color:inherit;max-width:1200px;margin:0 auto;padding:10px;}",
+    ".scs-about *,.scs-about *::before,.scs-about *::after{box-sizing:border-box;}",
+
+    /* heading + lead */
+    ".scs-about h2.scs-about__title{margin:0 0 1.25rem;padding:0;text-align:center;}",
+    ".scs-about p.scs-about__lead{max-width:860px;margin:0 auto clamp(1.75rem,4vw,2.75rem);padding:0 0 0 1.25rem;",
+    "border-left:4px solid var(--a);font-size:clamp(1.15rem,1.2vw + .8rem,1.45rem);line-height:1.5;}",
+
+    /* photo mosaic: 1 large + 2 stacked */
+    ".scs-about .scs-about__photos{display:grid;grid-template-columns:2fr 1fr;grid-template-rows:1fr 1fr;gap:10px;",
+    "height:clamp(320px,40vw,500px);margin:0 0 10px;}",
+    ".scs-about .scs-about__photo{margin:0;border-radius:12px;overflow:hidden;min-height:0;}",
+    ".scs-about .scs-about__photo:first-child{grid-row:1 / span 2;}",
+    ".scs-about .scs-about__photo img{display:block;width:100%;height:100%;margin:0;object-fit:cover;transition:transform .5s ease;}",
+    ".scs-about .scs-about__photo:hover img{transform:scale(1.04);}",
+    ".scs-about .scs-about__ph{display:flex;align-items:center;justify-content:center;width:100%;height:100%;",
+    "border:2px dashed var(--a);border-radius:12px;background:rgba(0,0,0,.03);color:var(--a);opacity:.6;",
+    "font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;}",
+    "@media (max-width:700px){.scs-about .scs-about__photos{grid-template-columns:1fr 1fr;grid-template-rows:auto auto;height:auto;}",
+    ".scs-about .scs-about__photo{aspect-ratio:4/3;}",
+    ".scs-about .scs-about__photo:first-child{grid-row:auto;grid-column:1 / span 2;aspect-ratio:16/10;}}",
+
+    /* stat strip */
+    ".scs-about ul.scs-about__stats{list-style:none;margin:0 0 clamp(1.75rem,4vw,2.75rem);padding:0;display:grid;",
+    "grid-template-columns:repeat(4,1fr);gap:10px;}",
+    "@media (max-width:820px){.scs-about ul.scs-about__stats{grid-template-columns:repeat(2,1fr);}}",
+    ".scs-about li.scs-about__stat{margin:0;padding:1.25rem 1rem;list-style:none;background:var(--as);border-radius:12px;text-align:center;}",
+    ".scs-about li.scs-about__stat::marker{content:none;}",
+    ".scs-about .scs-about__big{display:block;font-size:clamp(1.5rem,2.2vw + .6rem,2.25rem);font-weight:700;line-height:1.1;color:var(--a);}",
+    ".scs-about .scs-about__small{display:block;margin-top:.35rem;font-size:.85rem;line-height:1.35;}",
+
+    /* body copy */
+    ".scs-about .scs-about__body{max-width:860px;margin:0 auto clamp(1.75rem,4vw,2.75rem);}",
+    ".scs-about .scs-about__body p{margin:0 0 1rem;font-size:1rem;line-height:1.7;}",
+    ".scs-about .scs-about__body p:last-child{margin-bottom:0;}",
+
+    /* closing quote */
+    ".scs-about blockquote.scs-about__quote{margin:0;padding:clamp(1.75rem,4vw,3rem) clamp(1.25rem,4vw,3rem);border:0;border-radius:12px;",
+    "background:var(--a);color:var(--qt);text-align:center;}",
+    ".scs-about blockquote.scs-about__quote::before,.scs-about blockquote.scs-about__quote::after{content:none;}",
+    ".scs-about .scs-about__qintro{display:block;margin:0 0 .5rem;font-size:1rem;line-height:1.5;opacity:.85;font-style:normal;}",
+    ".scs-about .scs-about__qtext{display:block;margin:0;font-size:clamp(1.4rem,2.4vw + .6rem,2.4rem);line-height:1.25;font-weight:700;font-style:normal;color:var(--qt);}",
+    "@media (prefers-reduced-motion:reduce){.scs-about .scs-about__photo img{transition:none;}.scs-about .scs-about__photo:hover img{transform:none;}}"
+  ].join("");
+
+  if (!document.getElementById("scs-about-style")) {
+    var style = document.createElement("style");
+    style.id = "scs-about-style";
+    style.textContent = css;
+    document.head.appendChild(style);
+  }
+
+  function el(tag, cls, text) {
+    var n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (text) n.textContent = text;
+    return n;
+  }
+
+  var section = el("section", "scs-about");
+  section.setAttribute("aria-labelledby", "scs-about-title");
+
+  var h2 = el("h2", "scs-about__title", HEADING);
+  h2.id = "scs-about-title";
+  section.appendChild(h2);
+  section.appendChild(el("p", "scs-about__lead", LEAD));
+
+  var photos = el("div", "scs-about__photos");
+  PHOTOS.forEach(function (p) {
+    var fig = el("figure", "scs-about__photo");
+    if (p.url) {
+      var img = el("img");
+      img.src = p.url;
+      img.alt = p.alt;
+      img.loading = "lazy";
+      fig.appendChild(img);
+    } else {
+      fig.appendChild(el("div", "scs-about__ph", "Photo"));
+    }
+    photos.appendChild(fig);
+  });
+  section.appendChild(photos);
+
+  var stats = el("ul", "scs-about__stats");
+  STATS.forEach(function (s) {
+    var li = el("li", "scs-about__stat");
+    li.appendChild(el("span", "scs-about__big", s.big));
+    li.appendChild(el("span", "scs-about__small", s.small));
+    stats.appendChild(li);
+  });
+  section.appendChild(stats);
+
+  var body = el("div", "scs-about__body");
+  PARAGRAPHS.forEach(function (t) { body.appendChild(el("p", "", t)); });
+  section.appendChild(body);
+
+  var quote = el("blockquote", "scs-about__quote");
+  quote.appendChild(el("span", "scs-about__qintro", QUOTE_INTRO));
+  quote.appendChild(el("span", "scs-about__qtext", QUOTE));
+  section.appendChild(quote);
+
+  root.appendChild(section);
+})();
+</script>
