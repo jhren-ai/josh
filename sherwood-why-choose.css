@@ -1,0 +1,150 @@
+/* Sherwood Charter School — "Why Choose SCS" tiles
+   Paste into Appearance > Customize > Additional CSS
+   (or your theme / page builder's custom CSS box).
+   Brand colors: edit the four --scs-* values below. */
+
+.scs-why{
+  --scs-accent:      #1F4E79; /* main brand color: numbers, top bar, hover border */
+  --scs-accent-soft: #E8EEF5; /* icon background tint */
+  --scs-tile-bg:     #FFFFFF; /* tile background */
+  --scs-border:      #DCE1E7; /* tile border at rest */
+
+  font-family:inherit;
+  color:inherit;
+  max-width:1200px;
+  margin:0 auto;
+  padding:clamp(2.5rem,6vw,4.5rem) 1rem;
+}
+.scs-why *,
+.scs-why *::before,
+.scs-why *::after{ box-sizing:border-box; }
+
+.scs-why h2.scs-why__title{
+  margin:0 0 clamp(1.75rem,4vw,2.75rem);
+  text-align:center;
+}
+
+/* grid — reset the theme's list styles */
+.scs-why ol.scs-why__grid{
+  list-style:none;
+  margin:0;
+  padding:0;
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:1.5rem;
+}
+@media (max-width:1024px){
+  .scs-why ol.scs-why__grid{ grid-template-columns:repeat(2,1fr); }
+}
+@media (max-width:600px){
+  .scs-why ol.scs-why__grid{ grid-template-columns:1fr; }
+}
+
+.scs-why li.scs-why__tile{
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  list-style:none;
+  margin:0;
+  padding:2rem 1.5rem 1.75rem;
+  background:var(--scs-tile-bg);
+  border:1px solid var(--scs-border);
+  border-radius:12px;
+  overflow:hidden;
+  transition:transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+}
+.scs-why li.scs-why__tile::marker{ content:none; }
+
+/* accent bar that grows across the top on hover */
+.scs-why li.scs-why__tile::before{
+  content:"";
+  position:absolute;
+  top:0;
+  left:0;
+  height:4px;
+  width:2.5rem;
+  background:var(--scs-accent);
+  transition:width .3s ease;
+}
+.scs-why li.scs-why__tile:hover,
+.scs-why li.scs-why__tile:focus-within{
+  transform:translateY(-6px);
+  border-color:var(--scs-accent);
+  box-shadow:0 14px 30px -12px rgba(0,0,0,.22);
+}
+.scs-why li.scs-why__tile:hover::before,
+.scs-why li.scs-why__tile:focus-within::before{ width:100%; }
+
+.scs-why .scs-why__head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin:0 0 1.25rem;
+}
+
+.scs-why .scs-why__icon{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:72px;
+  height:72px;
+  border-radius:50%;
+  background:var(--scs-accent-soft);
+  transition:transform .25s ease;
+}
+.scs-why li.scs-why__tile:hover .scs-why__icon{ transform:scale(1.06); }
+.scs-why .scs-why__icon img{
+  display:block;
+  width:56%;
+  height:56%;
+  margin:0;
+  object-fit:contain;
+}
+
+/* placeholder until the real icon is added */
+.scs-why .scs-why__icon-placeholder{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:100%;
+  height:100%;
+  border:2px dashed var(--scs-accent);
+  border-radius:50%;
+  font-size:.65rem;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:var(--scs-accent);
+  opacity:.6;
+}
+
+.scs-why .scs-why__num{
+  font-size:2rem;
+  font-weight:700;
+  line-height:1;
+  color:var(--scs-accent);
+  opacity:.25;
+  transition:opacity .25s ease;
+}
+.scs-why li.scs-why__tile:hover .scs-why__num{ opacity:.6; }
+
+.scs-why h3.scs-why__tile-title{
+  margin:0 0 .75rem;
+  padding:0;
+  font-size:1.35rem;
+  line-height:1.25;
+}
+.scs-why li.scs-why__tile p{
+  margin:0;
+  font-size:1rem;
+  line-height:1.6;
+}
+
+@media (prefers-reduced-motion:reduce){
+  .scs-why li.scs-why__tile,
+  .scs-why li.scs-why__tile::before,
+  .scs-why .scs-why__icon,
+  .scs-why .scs-why__num{ transition:none; }
+  .scs-why li.scs-why__tile:hover,
+  .scs-why li.scs-why__tile:focus-within,
+  .scs-why li.scs-why__tile:hover .scs-why__icon{ transform:none; }
+}
