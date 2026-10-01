@@ -1,0 +1,214 @@
+<div id="scs-tst-root"></div>
+<script>
+(function () {
+  /* ===== EDIT HERE ===================================================== */
+  var COLORS = {
+    accent:     "#1F4E79", /* quote mark, arrows, active dot */
+    accentSoft: "#E8EEF5", /* card background */
+    dot:        "#B8C4D1"  /* inactive dots */
+  };
+
+  var SECONDS_PER_SLIDE = 8;
+
+  var HEADING = "What Families Say About SCS";
+
+  var TESTIMONIALS = [
+    {
+      quote: "After 10 years at SCS, we truly feel it has become a second home for our family. The warm, welcoming and supportive environment has allowed our children to feel comfortable, grow up alongside friends they’ve known since kindergarten, and make friendships and memories that will last a lifetime.",
+      name:  "Hader",
+      role:  "Parent of a recent 8th grade graduate, 6th grader & 3rd grader"
+    },
+    {
+      quote: "Sherwood Charter School has far exceeded my expectations as far as curriculum, sense of community, the staff, school leadership, school board and Parent Advisory Committee. As a Newberg resident, the commute is simple and effortless and I was pleasantly surprised how many other families in the Newberg and Dundee area also attend the school.",
+      name:  "Robin",
+      role:  "Parent of a first grader"
+    },
+    {
+      quote: "SCS has brought a loving community and many sparkles of curiosity into our lives. It’s a place where learning has come off the page and into little hands with projects, field trips and connections to the real world. It’s our dream school come true!",
+      name:  "Ellie",
+      role:  "Parent of a 2nd Grade Student"
+    }
+  ];
+  /* ===================================================================== */
+
+  var root = document.getElementById("scs-tst-root");
+  if (!root || !TESTIMONIALS.length) return;
+
+  var css = [
+    ".scs-tst{--a:" + COLORS.accent + ";--as:" + COLORS.accentSoft + ";--dot:" + COLORS.dot + ";",
+    "font-family:inherit;color:inherit;max-width:1200px;margin:0 auto;padding:10px;}",
+    ".scs-tst *,.scs-tst *::before,.scs-tst *::after{box-sizing:border-box;}",
+    ".scs-tst h2.scs-tst__title{margin:0 0 clamp(1.25rem,3vw,2rem);padding:0;text-align:center;}",
+
+    ".scs-tst .scs-tst__card{position:relative;max-width:900px;margin:0 auto;padding:clamp(3.25rem,5vw,3.75rem) clamp(3.25rem,7vw,5.5rem) clamp(1.75rem,4vw,2.5rem);",
+    "background:var(--as);border-radius:12px;text-align:center;}",
+    ".scs-tst .scs-tst__mark{position:absolute;top:.1em;left:50%;transform:translateX(-50%);font-family:Georgia,serif;",
+    "font-size:5rem;line-height:1;color:var(--a);opacity:.25;pointer-events:none;}",
+
+    /* all slides share one grid cell, so the card is always as tall as the longest quote */
+    ".scs-tst .scs-tst__track{display:grid;}",
+    ".scs-tst .scs-tst__slide{grid-area:1 / 1;opacity:0;visibility:hidden;transition:opacity .6s ease,visibility 0s linear .6s;}",
+    ".scs-tst .scs-tst__slide.is-active{opacity:1;visibility:visible;transition:opacity .6s ease,visibility 0s;}",
+    ".scs-tst blockquote.scs-tst__quote{margin:0;padding:0;border:0;background:none;}",
+    ".scs-tst blockquote.scs-tst__quote::before,.scs-tst blockquote.scs-tst__quote::after{content:none;}",
+    ".scs-tst .scs-tst__text{margin:0 0 1.25rem;font-size:clamp(1.05rem,.8vw + .8rem,1.3rem);line-height:1.6;font-style:normal;}",
+    ".scs-tst .scs-tst__name{display:block;font-weight:700;font-style:normal;font-size:1.05rem;color:var(--a);}",
+    ".scs-tst .scs-tst__role{display:block;margin-top:.2rem;font-size:.9rem;line-height:1.4;opacity:.8;}",
+
+    /* arrows */
+    ".scs-tst button.scs-tst__arrow{all:unset;box-sizing:border-box;position:absolute;top:50%;transform:translateY(-50%);",
+    "display:flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:50%;cursor:pointer;",
+    "background:#fff;color:var(--a);box-shadow:0 4px 12px -6px rgba(0,0,0,.35);transition:background-color .2s ease,color .2s ease;}",
+    ".scs-tst button.scs-tst__arrow:hover{background:var(--a);color:#fff;}",
+    ".scs-tst button.scs-tst__arrow:focus-visible,.scs-tst button.scs-tst__dot:focus-visible,.scs-tst button.scs-tst__pause:focus-visible{outline:3px solid var(--a);outline-offset:3px;}",
+    ".scs-tst button.scs-tst__prev{left:10px;}",
+    ".scs-tst button.scs-tst__next{right:10px;}",
+    ".scs-tst button.scs-tst__arrow svg{width:20px;height:20px;}",
+    "@media (max-width:600px){.scs-tst button.scs-tst__arrow{width:36px;height:36px;}.scs-tst button.scs-tst__prev{left:6px;}.scs-tst button.scs-tst__next{right:6px;}}",
+
+    /* dots + pause */
+    ".scs-tst .scs-tst__nav{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:1.25rem;}",
+    ".scs-tst button.scs-tst__dot{all:unset;box-sizing:border-box;width:12px;height:12px;border-radius:999px;cursor:pointer;",
+    "background:var(--dot);transition:width .3s ease,background-color .3s ease;}",
+    ".scs-tst button.scs-tst__dot[aria-current=true]{width:32px;background:var(--a);}",
+    ".scs-tst button.scs-tst__pause{all:unset;box-sizing:border-box;display:flex;align-items:center;justify-content:center;",
+    "width:28px;height:28px;margin-left:6px;border-radius:50%;cursor:pointer;color:var(--a);}",
+    ".scs-tst button.scs-tst__pause svg{width:14px;height:14px;}",
+    "@media (prefers-reduced-motion:reduce){.scs-tst .scs-tst__slide,.scs-tst .scs-tst__slide.is-active,.scs-tst button.scs-tst__dot{transition:none;}}"
+  ].join("");
+
+  if (!document.getElementById("scs-tst-style")) {
+    var style = document.createElement("style");
+    style.id = "scs-tst-style";
+    style.textContent = css;
+    document.head.appendChild(style);
+  }
+
+  function el(tag, cls, text) {
+    var n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (text) n.textContent = text;
+    return n;
+  }
+  function icon(path) {
+    return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + path + "</svg>";
+  }
+  var ICON_PREV  = icon('<path d="M15 18l-6-6 6-6"/>');
+  var ICON_NEXT  = icon('<path d="M9 18l6-6-6-6"/>');
+  var ICON_PAUSE = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="5" y="4" width="5" height="16" rx="1"/><rect x="14" y="4" width="5" height="16" rx="1"/></svg>';
+  var ICON_PLAY  = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4l13 8-13 8z"/></svg>';
+
+  var section = el("section", "scs-tst");
+  section.setAttribute("aria-roledescription", "carousel");
+  section.setAttribute("aria-labelledby", "scs-tst-title");
+  var h2 = el("h2", "scs-tst__title", HEADING);
+  h2.id = "scs-tst-title";
+  section.appendChild(h2);
+
+  var card = el("div", "scs-tst__card");
+  var mark = el("span", "scs-tst__mark", "“");
+  mark.setAttribute("aria-hidden", "true");
+  card.appendChild(mark);
+
+  var track = el("div", "scs-tst__track");
+  track.setAttribute("aria-live", "off");
+  var slides = TESTIMONIALS.map(function (t, i) {
+    var s = el("div", "scs-tst__slide");
+    s.setAttribute("role", "group");
+    s.setAttribute("aria-roledescription", "slide");
+    s.setAttribute("aria-label", (i + 1) + " of " + TESTIMONIALS.length);
+    var bq = el("blockquote", "scs-tst__quote");
+    bq.appendChild(el("p", "scs-tst__text", t.quote));
+    s.appendChild(bq);
+    s.appendChild(el("span", "scs-tst__name", t.name));
+    s.appendChild(el("span", "scs-tst__role", t.role));
+    track.appendChild(s);
+    return s;
+  });
+  card.appendChild(track);
+
+  var prev = el("button", "scs-tst__arrow scs-tst__prev");
+  prev.type = "button";
+  prev.setAttribute("aria-label", "Previous testimonial");
+  prev.innerHTML = ICON_PREV;
+  var next = el("button", "scs-tst__arrow scs-tst__next");
+  next.type = "button";
+  next.setAttribute("aria-label", "Next testimonial");
+  next.innerHTML = ICON_NEXT;
+  card.appendChild(prev);
+  card.appendChild(next);
+  section.appendChild(card);
+
+  var nav = el("div", "scs-tst__nav");
+  var dots = TESTIMONIALS.map(function (t, i) {
+    var d = el("button", "scs-tst__dot");
+    d.type = "button";
+    d.setAttribute("aria-label", "Show testimonial " + (i + 1));
+    d.addEventListener("click", function () { go(i, true); });
+    nav.appendChild(d);
+    return d;
+  });
+  var pauseBtn = el("button", "scs-tst__pause");
+  pauseBtn.type = "button";
+  nav.appendChild(pauseBtn);
+  section.appendChild(nav);
+  root.appendChild(section);
+
+  var current = 0;
+  var timer = null;
+  var hovering = false;
+  var reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var playing = !reduceMotion && TESTIMONIALS.length > 1;
+
+  function go(i, byUser) {
+    current = (i + slides.length) % slides.length;
+    slides.forEach(function (s, j) {
+      var on = j === current;
+      s.classList.toggle("is-active", on);
+      s.setAttribute("aria-hidden", on ? "false" : "true");
+      dots[j].setAttribute("aria-current", on ? "true" : "false");
+    });
+    if (byUser) {
+      track.setAttribute("aria-live", "polite");
+      restart();
+    }
+  }
+  function stop() { if (timer) { clearInterval(timer); timer = null; } }
+  function restart() {
+    stop();
+    if (playing && !hovering) {
+      timer = setInterval(function () { go(current + 1, false); }, SECONDS_PER_SLIDE * 1000);
+    }
+  }
+  function setPlaying(on) {
+    playing = on;
+    pauseBtn.innerHTML = on ? ICON_PAUSE : ICON_PLAY;
+    pauseBtn.setAttribute("aria-label", on ? "Pause testimonials" : "Play testimonials");
+    track.setAttribute("aria-live", on ? "off" : "polite");
+    restart();
+  }
+
+  prev.addEventListener("click", function () { go(current - 1, true); });
+  next.addEventListener("click", function () { go(current + 1, true); });
+  pauseBtn.addEventListener("click", function () { setPlaying(!playing); });
+  section.addEventListener("mouseenter", function () { hovering = true; stop(); });
+  section.addEventListener("mouseleave", function () { hovering = false; restart(); });
+  section.addEventListener("focusin", function () { hovering = true; stop(); });
+  section.addEventListener("focusout", function (e) {
+    if (!section.contains(e.relatedTarget)) { hovering = false; restart(); }
+  });
+
+  var touchX = null;
+  card.addEventListener("touchstart", function (e) { touchX = e.touches[0].clientX; }, { passive: true });
+  card.addEventListener("touchend", function (e) {
+    if (touchX === null) return;
+    var dx = e.changedTouches[0].clientX - touchX;
+    if (Math.abs(dx) > 40) go(current + (dx < 0 ? 1 : -1), true);
+    touchX = null;
+  });
+
+  if (TESTIMONIALS.length < 2) { prev.hidden = next.hidden = true; nav.hidden = true; }
+  go(0, false);
+  setPlaying(playing);
+})();
+</script>
