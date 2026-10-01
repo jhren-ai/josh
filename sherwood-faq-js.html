@@ -1,0 +1,164 @@
+<div id="scs-faq-root"></div>
+<script>
+(function () {
+  /* ===== EDIT HERE ===================================================== */
+  var COLORS = {
+    accent:     "#1F4E79", /* icon, links, open border */
+    accentSoft: "#E8EEF5", /* question hover / open background */
+    border:     "#DCE1E7"
+  };
+
+  var HEADING = "Frequently Asked Questions";
+
+  /* Answers can include links: <a href="https://...">link text</a> */
+  var FAQS = [
+    {
+      q: "Is Sherwood Charter School tuition-free?",
+      a: "Yes, Sherwood Charter School is a public school of choice and is tuition-free for families that live within Sherwood and in neighboring towns."
+    },
+    {
+      q: "Does my family need to live in Sherwood to attend?",
+      a: "No, your family does not need to live in Sherwood to attend our school. Roughly half of our students come from neighboring areas including Tigard, Tualatin, Beaverton, Newberg, and Wilsonville."
+    },
+    {
+      q: "What does the four-day school week look like?",
+      a: "The four-day school week is beloved by students and staff alike. Students are in session for slightly longer each day, but always have Fridays off to ensure ample time for extracurricular activities and to engage with friends and family. We do not have late start or early release school days."
+    },
+    {
+      q: "How big are classes at Sherwood Charter School?",
+      a: "Our elementary classrooms are capped at 25 students each, and the middle school cohort operates with 75 students between the three grades."
+    },
+    {
+      q: "What opportunities do students have beyond academics?",
+      a: "Middle schoolers at SCS have electives opportunities including robotics and band, while building friendships and leadership skills through our unique House program. Mixed-grade Houses bring 6th-, 7th-, and 8th-graders together for team-building, service projects, problem-solving, and friendly competition, creating a strong sense of belonging in our close-knit 75-student community."
+    },
+    {
+      q: "How do I enroll or schedule a tour?",
+      a: "If you are interested in immediate enrollment, reach out to our office team to schedule a tour. You may submit <a href=\"https://app.lotterease.com//cgi-bin/sl_V2_1.pl?nav=Parents_Registration&account_id=1325\">enrollment paperwork</a> before or after. If you are considering enrollment for a future year, join us for one of our regularly scheduled <a href=\"https://sherwoodcharterschool.org/enrollment/tour-request/\">monthly tours</a>."
+    }
+  ];
+
+  var ONLY_ONE_OPEN = false; /* true = opening one question closes the others */
+  /* ===================================================================== */
+
+  var root = document.getElementById("scs-faq-root");
+  if (!root) return;
+
+  var css = [
+    ".scs-faq{--a:" + COLORS.accent + ";--as:" + COLORS.accentSoft + ";--bd:" + COLORS.border + ";",
+    "font-family:inherit;color:inherit;max-width:900px;margin:0 auto;padding:10px;}",
+    ".scs-faq *,.scs-faq *::before,.scs-faq *::after{box-sizing:border-box;}",
+    ".scs-faq h2.scs-faq__title{margin:0 0 clamp(1.25rem,3vw,2rem);padding:0;text-align:center;}",
+    ".scs-faq .scs-faq__list{display:flex;flex-direction:column;gap:10px;}",
+
+    ".scs-faq .scs-faq__item{border:1px solid var(--bd);border-radius:12px;background:#fff;overflow:hidden;transition:border-color .25s ease,box-shadow .25s ease;}",
+    ".scs-faq .scs-faq__item.is-open{border-color:var(--a);box-shadow:0 10px 24px -14px rgba(0,0,0,.3);}",
+    ".scs-faq h3.scs-faq__h{margin:0;padding:0;font-size:inherit;line-height:inherit;}",
+
+    ".scs-faq button.scs-faq__q{all:unset;box-sizing:border-box;display:flex;align-items:center;justify-content:space-between;gap:1rem;",
+    "width:100%;padding:1.1rem 1.25rem;cursor:pointer;font-family:inherit;font-size:clamp(1.05rem,.5vw + .9rem,1.2rem);",
+    "font-weight:600;line-height:1.35;color:inherit;text-align:left;transition:background-color .2s ease;}",
+    ".scs-faq button.scs-faq__q:hover,.scs-faq .scs-faq__item.is-open button.scs-faq__q{background:var(--as);}",
+    ".scs-faq button.scs-faq__q:focus-visible{outline:3px solid var(--a);outline-offset:-3px;border-radius:12px;}",
+
+    /* plus that turns into a minus */
+    ".scs-faq .scs-faq__icon{position:relative;flex:0 0 28px;width:28px;height:28px;border-radius:50%;background:var(--a);transition:transform .3s ease;}",
+    ".scs-faq .scs-faq__icon::before,.scs-faq .scs-faq__icon::after{content:'';position:absolute;top:50%;left:50%;width:12px;height:2px;",
+    "margin:-1px 0 0 -6px;background:#fff;border-radius:2px;transition:transform .3s ease;}",
+    ".scs-faq .scs-faq__icon::after{transform:rotate(90deg);}",
+    ".scs-faq .scs-faq__item.is-open .scs-faq__icon{transform:rotate(180deg);}",
+    ".scs-faq .scs-faq__item.is-open .scs-faq__icon::after{transform:rotate(0deg);}",
+
+    /* smooth open/close */
+    ".scs-faq .scs-faq__panel{display:grid;grid-template-rows:0fr;visibility:hidden;",
+    "transition:grid-template-rows .35s ease,visibility 0s linear .35s;}",
+    ".scs-faq .scs-faq__item.is-open .scs-faq__panel{grid-template-rows:1fr;visibility:visible;transition:grid-template-rows .35s ease,visibility 0s;}",
+    ".scs-faq .scs-faq__inner{min-height:0;overflow:hidden;}",
+    ".scs-faq .scs-faq__a{margin:0;padding:.25rem 1.25rem 1.25rem;font-size:1rem;line-height:1.65;}",
+    ".scs-faq .scs-faq__a a{color:var(--a);font-weight:600;text-decoration:underline;text-underline-offset:2px;}",
+    ".scs-faq .scs-faq__a a:hover{text-decoration-thickness:2px;}",
+    "@media (prefers-reduced-motion:reduce){.scs-faq .scs-faq__panel,.scs-faq .scs-faq__item.is-open .scs-faq__panel,",
+    ".scs-faq .scs-faq__icon,.scs-faq .scs-faq__icon::before,.scs-faq .scs-faq__icon::after{transition:none;}}"
+  ].join("");
+
+  if (!document.getElementById("scs-faq-style")) {
+    var style = document.createElement("style");
+    style.id = "scs-faq-style";
+    style.textContent = css;
+    document.head.appendChild(style);
+  }
+
+  function el(tag, cls, text) {
+    var n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (text) n.textContent = text;
+    return n;
+  }
+
+  var section = el("section", "scs-faq");
+  section.setAttribute("aria-labelledby", "scs-faq-title");
+  var h2 = el("h2", "scs-faq__title", HEADING);
+  h2.id = "scs-faq-title";
+  section.appendChild(h2);
+
+  var list = el("div", "scs-faq__list");
+  var items = FAQS.map(function (f, i) {
+    var item = el("div", "scs-faq__item");
+    var h = el("h3", "scs-faq__h");
+    var btn = el("button", "scs-faq__q");
+    btn.type = "button";
+    btn.id = "scs-faq-q" + i;
+    btn.setAttribute("aria-expanded", "false");
+    btn.setAttribute("aria-controls", "scs-faq-a" + i);
+    btn.appendChild(el("span", "", f.q));
+    var ic = el("span", "scs-faq__icon");
+    ic.setAttribute("aria-hidden", "true");
+    btn.appendChild(ic);
+    h.appendChild(btn);
+
+    var panel = el("div", "scs-faq__panel");
+    panel.id = "scs-faq-a" + i;
+    panel.setAttribute("role", "region");
+    panel.setAttribute("aria-labelledby", btn.id);
+    var inner = el("div", "scs-faq__inner");
+    var ans = el("p", "scs-faq__a");
+    ans.innerHTML = f.a;
+    inner.appendChild(ans);
+    panel.appendChild(inner);
+
+    item.appendChild(h);
+    item.appendChild(panel);
+    list.appendChild(item);
+
+    btn.addEventListener("click", function () {
+      var open = !item.classList.contains("is-open");
+      if (open && ONLY_ONE_OPEN) items.forEach(function (o) { if (o.item !== item) set(o, false); });
+      set({ item: item, btn: btn }, open);
+    });
+    return { item: item, btn: btn };
+  });
+
+  function set(o, open) {
+    o.item.classList.toggle("is-open", open);
+    o.btn.setAttribute("aria-expanded", open ? "true" : "false");
+  }
+
+  section.appendChild(list);
+  root.appendChild(section);
+
+  /* FAQ structured data so Google can show these questions in search results */
+  if (!document.getElementById("scs-faq-schema")) {
+    var ld = document.createElement("script");
+    ld.type = "application/ld+json";
+    ld.id = "scs-faq-schema";
+    ld.textContent = JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": FAQS.map(function (f) {
+        return { "@type": "Question", "name": f.q, "acceptedAnswer": { "@type": "Answer", "text": f.a } };
+      })
+    });
+    document.head.appendChild(ld);
+  }
+})();
+</script>
