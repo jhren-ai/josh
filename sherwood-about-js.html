@@ -3,9 +3,8 @@
 (function () {
   /* ===== EDIT HERE ===================================================== */
   var COLORS = {
-    accent:     "#1F4E79", /* stat numbers, rules, quote background */
-    accentSoft: "#E8EEF5", /* stat strip background */
-    quoteText:  "#FFFFFF"
+    accent:     "#1F4E79", /* stat numbers, rule beside the intro */
+    accentSoft: "#E8EEF5"  /* stat strip background */
   };
 
   /* Photos: upload to Media > Add New, click each, "Copy URL to clipboard",
@@ -13,7 +12,7 @@
      Leave url "" to show a placeholder. */
   var PHOTOS = [
     { url: "https://sherwoodcharterschool.org/wp-content/uploads/2026/10/IMG_9189-1-scaled.jpg", alt: "Sherwood Charter School students running" },
-    { url: "https://sherwoodcharterschool.org/wp-content/uploads/2026/10/FullSizeRender-scaled.jpg", alt: "Students reading books together" },
+    { url: "https://sherwoodcharterschool.org/wp-content/uploads/2026/10/FullSizeRender-1-scaled.jpg", alt: "Students with item" },
     { url: "https://sherwoodcharterschool.org/wp-content/uploads/2026/10/IMG_0233-scaled.jpg", alt: "Students at the beach on a field trip" }
   ];
 
@@ -32,16 +31,13 @@
     "Sherwood Charter School enrollment is open to families within and beyond Sherwood, and the school operates on a four-day school week, offering students extended weekends to engage with the world around them.",
     "Students enjoy high enrichment with multiple field trips each year, opportunities for musical and theatrical performances, hands-on arts education, and immersive experiences in their classrooms that bring learning to life."
   ];
-
-  var QUOTE_INTRO = "We hear it all the time from our students and their families:";
-  var QUOTE       = "This is a place where kids love coming to school!";
   /* ===================================================================== */
 
   var root = document.getElementById("scs-about-root");
   if (!root) return;
 
   var css = [
-    ".scs-about{--a:" + COLORS.accent + ";--as:" + COLORS.accentSoft + ";--qt:" + COLORS.quoteText + ";",
+    ".scs-about{--a:" + COLORS.accent + ";--as:" + COLORS.accentSoft + ";",
     "font-family:inherit;color:inherit;max-width:1200px;margin:0 auto;padding:10px;}",
     ".scs-about *,.scs-about *::before,.scs-about *::after{box-sizing:border-box;}",
 
@@ -74,16 +70,10 @@
     ".scs-about .scs-about__small{display:block;margin-top:.35rem;font-size:.85rem;line-height:1.35;}",
 
     /* body copy */
-    ".scs-about .scs-about__body{max-width:860px;margin:0 auto clamp(1.75rem,4vw,2.75rem);}",
+    ".scs-about .scs-about__body{max-width:860px;margin:0 auto;}",
     ".scs-about .scs-about__body p{margin:0 0 1rem;font-size:1rem;line-height:1.7;}",
     ".scs-about .scs-about__body p:last-child{margin-bottom:0;}",
 
-    /* closing quote */
-    ".scs-about blockquote.scs-about__quote{margin:0;padding:clamp(1.75rem,4vw,3rem) clamp(1.25rem,4vw,3rem);border:0;border-radius:12px;",
-    "background:var(--a);color:var(--qt);text-align:center;}",
-    ".scs-about blockquote.scs-about__quote::before,.scs-about blockquote.scs-about__quote::after{content:none;}",
-    ".scs-about .scs-about__qintro{display:block;margin:0 0 .5rem;font-size:1rem;line-height:1.5;opacity:.85;font-style:normal;}",
-    ".scs-about .scs-about__qtext{display:block;margin:0;font-size:clamp(1.4rem,2.4vw + .6rem,2.4rem);line-height:1.25;font-weight:700;font-style:normal;color:var(--qt);}",
     "@media (prefers-reduced-motion:reduce){.scs-about .scs-about__photo img{transition:none;}.scs-about .scs-about__photo:hover img{transform:none;}}"
   ].join("");
 
@@ -137,11 +127,6 @@
   var body = el("div", "scs-about__body");
   PARAGRAPHS.forEach(function (t) { body.appendChild(el("p", "", t)); });
   section.appendChild(body);
-
-  var quote = el("blockquote", "scs-about__quote");
-  quote.appendChild(el("span", "scs-about__qintro", QUOTE_INTRO));
-  quote.appendChild(el("span", "scs-about__qtext", QUOTE));
-  section.appendChild(quote);
 
   root.appendChild(section);
 })();
