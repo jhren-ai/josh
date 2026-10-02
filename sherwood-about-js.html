@@ -29,7 +29,8 @@
   var PARAGRAPHS = [
     "Elementary classrooms are capped at 25 students, while middle school students become part of a close-knit community of just 75 students where they are truly known. At every grade level, we foster a lifelong love of learning, meaningful relationships, and a strong foundation for continued academic success.",
     "Sherwood Charter School enrollment is open to families within and beyond Sherwood, and the school operates on a four-day school week, offering students extended weekends to engage with the world around them.",
-    "Students enjoy high enrichment with multiple field trips each year, opportunities for musical and theatrical performances, hands-on arts education, and immersive experiences in their classrooms that bring learning to life."
+    "Students enjoy high enrichment with multiple field trips each year, opportunities for musical and theatrical performances, hands-on arts education, and immersive experiences in their classrooms that bring learning to life.",
+    "We hear it all the time from our students and their families: This is a place where kids love coming to school!"
   ];
   /* ===================================================================== */
 
@@ -77,9 +78,9 @@
     "@media (prefers-reduced-motion:reduce){.scs-about .scs-about__photo img{transition:none;}.scs-about .scs-about__photo:hover img{transform:none;}}"
   ].join("");
 
-  if (!document.getElementById("scs-about-style")) {
+  if (!document.getElementById("scs-about-style-v2")) {
     var style = document.createElement("style");
-    style.id = "scs-about-style";
+    style.id = "scs-about-style-v2";
     style.textContent = css;
     document.head.appendChild(style);
   }
