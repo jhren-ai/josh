@@ -13,7 +13,7 @@
   var IMAGE_URL = "https://sherwoodcharterschool.org/wp-content/uploads/2026/10/FullSizeRender-scaled.jpg";
   var IMAGE_ALT = "Students learning at Sherwood Charter School";
 
-  var HEADING    = "Discover Sherwood Charter School";
+  var HEADING    = ""; /* leave "" for no heading */
   var SUBHEADING = "Finding the right school for your child matters.";
   var PARAGRAPHS = [
     "A small number of enrollment openings are still available for the 2026–27 school year in select middle school and elementary grades at Sherwood Charter School.",
@@ -67,13 +67,17 @@
   }
 
   var section = el("section", "scs-disc");
-  section.setAttribute("aria-labelledby", "scs-disc-title");
   var grid = el("div", "scs-disc__grid");
 
   var copy = el("div", "scs-disc__copy");
-  var h2 = el("h2", "scs-disc__title", HEADING);
-  h2.id = "scs-disc-title";
-  copy.appendChild(h2);
+  if (HEADING) {
+    var h2 = el("h2", "scs-disc__title", HEADING);
+    h2.id = "scs-disc-title";
+    copy.appendChild(h2);
+    section.setAttribute("aria-labelledby", "scs-disc-title");
+  } else {
+    section.setAttribute("aria-label", SUBHEADING);
+  }
   copy.appendChild(el("p", "scs-disc__sub", SUBHEADING));
   PARAGRAPHS.forEach(function (t) { copy.appendChild(el("p", "scs-disc__p", t)); });
   var btn = el("a", "scs-disc__btn", BUTTON_TEXT);
