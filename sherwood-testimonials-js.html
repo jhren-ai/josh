@@ -3,8 +3,10 @@
 (function () {
   /* ===== EDIT HERE ===================================================== */
   var COLORS = {
-    accent:     "#1F4E79", /* quote mark, arrows, active dot */
-    accentSoft: "#E8EEF5", /* card background */
+    accent:     "#006633", /* arrows, active dot, pause button */
+    cardBg:     "#006633", /* card background */
+    cardText:   "#FFFFFF", /* text inside the card */
+    arrowHover: "#004D26", /* arrow background on hover */
     dot:        "#B8C4D1"  /* inactive dots */
   };
 
@@ -35,15 +37,15 @@
   if (!root || !TESTIMONIALS.length) return;
 
   var css = [
-    ".scs-tst{--a:" + COLORS.accent + ";--as:" + COLORS.accentSoft + ";--dot:" + COLORS.dot + ";",
+    ".scs-tst{--a:" + COLORS.accent + ";--cb:" + COLORS.cardBg + ";--ct:" + COLORS.cardText + ";--ah:" + COLORS.arrowHover + ";--dot:" + COLORS.dot + ";",
     "font-family:inherit;color:inherit;max-width:1200px;margin:0 auto;padding:10px;}",
     ".scs-tst *,.scs-tst *::before,.scs-tst *::after{box-sizing:border-box;}",
     ".scs-tst h2.scs-tst__title{margin:0 0 clamp(1.25rem,3vw,2rem);padding:0;text-align:center;}",
 
     ".scs-tst .scs-tst__card{position:relative;max-width:900px;margin:0 auto;padding:clamp(3.25rem,5vw,3.75rem) clamp(3.25rem,7vw,5.5rem) clamp(1.75rem,4vw,2.5rem);",
-    "background:var(--as);border-radius:12px;text-align:center;}",
+    "background:var(--cb);color:var(--ct);border-radius:12px;text-align:center;}",
     ".scs-tst .scs-tst__mark{position:absolute;top:.1em;left:50%;transform:translateX(-50%);font-family:Georgia,serif;",
-    "font-size:5rem;line-height:1;color:var(--a);opacity:.25;pointer-events:none;}",
+    "font-size:5rem;line-height:1;color:var(--ct);opacity:.35;pointer-events:none;}",
 
     /* all slides share one grid cell, so the card is always as tall as the longest quote */
     ".scs-tst .scs-tst__track{display:grid;}",
@@ -51,16 +53,17 @@
     ".scs-tst .scs-tst__slide.is-active{opacity:1;visibility:visible;transition:opacity .6s ease,visibility 0s;}",
     ".scs-tst blockquote.scs-tst__quote{margin:0;padding:0;border:0;background:none;}",
     ".scs-tst blockquote.scs-tst__quote::before,.scs-tst blockquote.scs-tst__quote::after{content:none;}",
-    ".scs-tst .scs-tst__text{margin:0 0 1.25rem;font-size:clamp(1.05rem,.8vw + .8rem,1.3rem);line-height:1.6;font-style:normal;}",
-    ".scs-tst .scs-tst__name{display:block;font-weight:700;font-style:normal;font-size:1.05rem;color:var(--a);}",
-    ".scs-tst .scs-tst__role{display:block;margin-top:.2rem;font-size:.9rem;line-height:1.4;opacity:.8;}",
+    ".scs-tst .scs-tst__text{margin:0 0 1.25rem;font-size:clamp(1.05rem,.8vw + .8rem,1.3rem);line-height:1.6;font-style:normal;color:var(--ct);}",
+    ".scs-tst .scs-tst__name{display:block;font-weight:700;font-style:normal;font-size:1.05rem;color:var(--ct);}",
+    ".scs-tst .scs-tst__role{display:block;margin-top:.2rem;font-size:.9rem;line-height:1.4;color:var(--ct);opacity:.85;}",
 
     /* arrows */
     ".scs-tst button.scs-tst__arrow{all:unset;box-sizing:border-box;position:absolute;top:50%;transform:translateY(-50%);",
     "display:flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:50%;cursor:pointer;",
     "background:#fff;color:var(--a);box-shadow:0 4px 12px -6px rgba(0,0,0,.35);transition:background-color .2s ease,color .2s ease;}",
-    ".scs-tst button.scs-tst__arrow:hover{background:var(--a);color:#fff;}",
-    ".scs-tst button.scs-tst__arrow:focus-visible,.scs-tst button.scs-tst__dot:focus-visible,.scs-tst button.scs-tst__pause:focus-visible{outline:3px solid var(--a);outline-offset:3px;}",
+    ".scs-tst button.scs-tst__arrow:hover{background:var(--ah);color:#fff;}",
+    ".scs-tst button.scs-tst__arrow:focus-visible{outline:3px solid var(--ct);outline-offset:3px;}",
+    ".scs-tst button.scs-tst__dot:focus-visible,.scs-tst button.scs-tst__pause:focus-visible{outline:3px solid var(--a);outline-offset:3px;}",
     ".scs-tst button.scs-tst__prev{left:10px;}",
     ".scs-tst button.scs-tst__next{right:10px;}",
     ".scs-tst button.scs-tst__arrow svg{width:20px;height:20px;}",
@@ -77,9 +80,9 @@
     "@media (prefers-reduced-motion:reduce){.scs-tst .scs-tst__slide,.scs-tst .scs-tst__slide.is-active,.scs-tst button.scs-tst__dot{transition:none;}}"
   ].join("");
 
-  if (!document.getElementById("scs-tst-style")) {
+  if (!document.getElementById("scs-tst-style-v2")) {
     var style = document.createElement("style");
-    style.id = "scs-tst-style";
+    style.id = "scs-tst-style-v2";
     style.textContent = css;
     document.head.appendChild(style);
   }
