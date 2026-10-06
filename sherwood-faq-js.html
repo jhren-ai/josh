@@ -12,7 +12,8 @@
 
   var HEADING = "Frequently Asked Questions";
 
-  /* Answers can include links: <a href="https://...">link text</a> */
+  /* Answers can include links: <a href="https://...">link text</a>
+     For more than one paragraph, use a list: a: ["First paragraph.", "Second paragraph."] */
   var FAQS = [
     {
       q: "Is Sherwood Charter School tuition-free?",
@@ -32,7 +33,10 @@
     },
     {
       q: "What opportunities do students have beyond academics?",
-      a: "Middle schoolers at SCS have electives opportunities including robotics and band, while building friendships and leadership skills through our unique House program. Mixed-grade Houses bring 6th-, 7th-, and 8th-graders together for team-building, service projects, problem-solving, and friendly competition, creating a strong sense of belonging in our close-knit 75-student community."
+      a: [
+        "Elementary school students participate in a minimum of four field trips a year and engage with music, art and P.E. daily. As early as kindergarten, students will have opportunities to present and perform on stage, building their confidence and instilling trust in their classmates.",
+        "Middle schoolers at SCS have electives opportunities including robotics and band, while building friendships and leadership skills through our unique House program. Mixed-grade Houses bring 6th-, 7th-, and 8th-graders together for team-building, service projects, problem-solving, and friendly competition, creating a strong sense of belonging in our close-knit 75-student community."
+      ]
     },
     {
       q: "How do I enroll or schedule a tour?",
@@ -79,7 +83,9 @@
     "transition:grid-template-rows .35s ease,visibility 0s linear .35s;}",
     ".scs-faq .scs-faq__item.is-open .scs-faq__panel{grid-template-rows:1fr;visibility:visible;transition:grid-template-rows .35s ease,visibility 0s;}",
     ".scs-faq .scs-faq__inner{min-height:0;overflow:hidden;}",
-    ".scs-faq .scs-faq__a{margin:0;padding:.25rem 1.25rem 1.25rem;font-size:1rem;line-height:1.65;}",
+    ".scs-faq .scs-faq__a{padding:.25rem 1.25rem 1.25rem;}",
+    ".scs-faq .scs-faq__a p{margin:0 0 .85rem;font-size:1rem;line-height:1.65;}",
+    ".scs-faq .scs-faq__a p:last-child{margin-bottom:0;}",
     ".scs-faq .scs-faq__a a{color:var(--a);font-weight:600;text-decoration:underline;text-underline-offset:2px;}",
     ".scs-faq .scs-faq__a a:hover{text-decoration-thickness:2px;}",
 
@@ -96,12 +102,14 @@
     ".scs-faq .scs-faq__icon,.scs-faq .scs-faq__icon::before,.scs-faq .scs-faq__icon::after{transition:none;}}"
   ].join("");
 
-  if (!document.getElementById("scs-faq-style-v2")) {
+  if (!document.getElementById("scs-faq-style-v3")) {
     var style = document.createElement("style");
-    style.id = "scs-faq-style-v2";
+    style.id = "scs-faq-style-v3";
     style.textContent = css;
     document.head.appendChild(style);
   }
+
+  function paras(a) { return Array.isArray(a) ? a : [a]; }
 
   function el(tag, cls, text) {
     var n = document.createElement(tag);
@@ -136,8 +144,12 @@
     panel.setAttribute("role", "region");
     panel.setAttribute("aria-labelledby", btn.id);
     var inner = el("div", "scs-faq__inner");
-    var ans = el("p", "scs-faq__a");
-    ans.innerHTML = f.a;
+    var ans = el("div", "scs-faq__a");
+    paras(f.a).forEach(function (t) {
+      var para = el("p");
+      para.innerHTML = t;
+      ans.appendChild(para);
+    });
     inner.appendChild(ans);
     panel.appendChild(inner);
 
@@ -179,7 +191,7 @@
       "@context": "https://schema.org",
       "@type": "FAQPage",
       "mainEntity": FAQS.map(function (f) {
-        return { "@type": "Question", "name": f.q, "acceptedAnswer": { "@type": "Answer", "text": f.a } };
+        return { "@type": "Question", "name": f.q, "acceptedAnswer": { "@type": "Answer", "text": paras(f.a).join(" ") } };
       })
     });
     document.head.appendChild(ld);
