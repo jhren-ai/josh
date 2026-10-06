@@ -20,7 +20,7 @@
     "At SCS, your child will be known, supported, and challenged in a small classroom environment where teachers have the time to understand how they learn and help them grow before their transition to high school.",
     "If you’re looking for a school where academic achievement, high enrichment activities, and character development are part of each student’s everyday experience, explore SCS for your family."
   ];
-  /* bold sentence added to the end of the last paragraph (leave "" for none) */
+  /* bold blue line on its own paragraph after the others (leave "" for none) */
   var BOLD_ENDING = "We hear it all the time from our students and their families: This is a place where kids love coming to school!";
   var BUTTON_TEXT = "Apply Now";
   var BUTTON_URL  = "https://app.lotterease.com//cgi-bin/sl_V2_1.pl?nav=Parents_Registration&account_id=1325";
@@ -38,7 +38,7 @@
     ".scs-disc h2.scs-disc__title{margin:0 0 .5rem;padding:0;}",
     ".scs-disc p.scs-disc__sub{margin:0 0 1.25rem;font-size:clamp(1.75rem,1.6vw + 1.1rem,2.5rem);line-height:1.2;font-weight:600;color:var(--a);}",
     ".scs-disc p.scs-disc__p{margin:0 0 1rem;font-size:1rem;line-height:1.6;}",
-    ".scs-disc p.scs-disc__p strong{font-weight:700;}",
+    ".scs-disc p.scs-disc__bold{margin:0 0 1rem;font-size:1rem;line-height:1.6;font-weight:700;color:var(--a);}",
     ".scs-disc a.scs-disc__btn{display:inline-block;margin-top:.75rem;padding:.85rem 2rem;border-radius:999px;background:var(--a);color:var(--bt);",
     "font-weight:700;font-size:1rem;line-height:1.2;letter-spacing:.02em;text-decoration:none;border:0;",
     "box-shadow:0 6px 16px -8px rgba(0,0,0,.35);transition:background-color .2s ease,transform .2s ease,box-shadow .2s ease;}",
@@ -82,14 +82,8 @@
     section.setAttribute("aria-label", SUBHEADING);
   }
   copy.appendChild(el("p", "scs-disc__sub", SUBHEADING));
-  PARAGRAPHS.forEach(function (t, i) {
-    var para = el("p", "scs-disc__p", t);
-    if (BOLD_ENDING && i === PARAGRAPHS.length - 1) {
-      para.appendChild(document.createTextNode(" "));
-      para.appendChild(el("strong", "", BOLD_ENDING));
-    }
-    copy.appendChild(para);
-  });
+  PARAGRAPHS.forEach(function (t) { copy.appendChild(el("p", "scs-disc__p", t)); });
+  if (BOLD_ENDING) copy.appendChild(el("p", "scs-disc__bold", BOLD_ENDING));
   var btn = el("a", "scs-disc__btn", BUTTON_TEXT);
   btn.href = BUTTON_URL;
   copy.appendChild(btn);
